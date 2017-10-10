@@ -70,7 +70,7 @@ public extension CALayer {
     public convenience init(SVGData: Data, cache: Bool = false, parser: SVGParser? = nil, completion: @escaping (SVGLayer) -> ()) {
         self.init()
         
-        if cache && let cached = SVGCache.default[SVGData.cacheKey] {
+        if cache, let cached = SVGCache.default[SVGData.cacheKey] {
             DispatchQueue.main.safeAsync {
                 self.addSublayer(cached)
             }
