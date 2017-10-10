@@ -51,10 +51,10 @@ public extension CALayer {
      - Parameter completion: A required completion block to execute once the SVG has completed parsing. You must add the passed `SVGLayer` to a sublayer to display it.
      */
     @discardableResult
-    public convenience init(SVGURL: URL, parser: SVGParser? = nil, completion: @escaping (SVGLayer) -> ()) {
+    public convenience init(SVGURL: URL, cache: Bool = false, parser: SVGParser? = nil, completion: @escaping (SVGLayer) -> ()) {
         do {
             let svgData = try Data(contentsOf: SVGURL)
-            self.init(SVGData: svgData, parser: parser, completion: completion)
+            self.init(SVGData: svgData, cache: cache, parser: parser, completion: completion)
         } catch {
             self.init()
         }
@@ -67,10 +67,10 @@ public extension CALayer {
      - Parameter completion: A required completion block to execute once the SVG has completed parsing. You must add the passed `SVGLayer` to a sublayer to display it.
      */
     @discardableResult
-    public convenience init(SVGData: Data, parser: SVGParser? = nil, completion: @escaping (SVGLayer) -> ()) {
+    public convenience init(SVGData: Data, cache: Bool = false, parser: SVGParser? = nil, completion: @escaping (SVGLayer) -> ()) {
         self.init()
         
-        if let cached = SVGCache.default[SVGData.cacheKey] {
+        if cache && let cached = SVGCache.default[SVGData.cacheKey] {
             DispatchQueue.main.safeAsync {
                 self.addSublayer(cached)
             }
@@ -87,12 +87,13 @@ public extension CALayer {
                 parserToUse = parser
             } else {
                 parserToUse = NSXMLSVGParser(SVGData: SVGData) { (svgLayer) in
-                    
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        guard let layerCopy = svgLayer.svgLayerCopy else {
-                            return
+                    if cache {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            guard let layerCopy = svgLayer.svgLayerCopy else {
+                                return
+                            }
+                            SVGCache.default[SVGData.cacheKey] = layerCopy
                         }
-                        SVGCache.default[SVGData.cacheKey] = layerCopy
                     }
                     
                     DispatchQueue.main.safeAsync {
