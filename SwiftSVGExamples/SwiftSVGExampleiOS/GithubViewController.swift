@@ -48,6 +48,13 @@ class GithubViewController: UIViewController {
             }),
             CellItem(render: { (cellSize) -> UIView in
                 
+                // Simplest example of an SVG stored in the assets catalog as a Data Asset
+                
+                let svgView = UIView(SVGNamed: "cowboyHat")
+                return svgView
+            }),
+            CellItem(render: { (cellSize) -> UIView in
+                
                 // Parsing a single path string syncronously
                 
                 let triangle = UIView(pathString: "M75 0 l75 200 L0 200 Z")
@@ -93,7 +100,17 @@ class GithubViewController: UIViewController {
                 shapeLayer.path = teaPath.cgPath
                 returnView.layer.addSublayer(shapeLayer)
                 return returnView
-            })
+            }),
+            CellItem(render: { (cellSize) -> UIView in
+                
+                // Simplest example of an SVG stored in the assets catalog as a Data Asset
+                
+                let svgView = UIView(SVGNamed: "raphaelcruzeiro") { (l: SVGLayer) -> Void in
+                    l.fillColor = UIColor.blue.cgColor
+                    l.strokeColor = l.fillColor
+                }
+                return svgView
+            }),
         ]
         return returnData
     }()

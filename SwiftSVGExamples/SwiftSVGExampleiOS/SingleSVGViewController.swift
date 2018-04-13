@@ -51,7 +51,6 @@ class SingleSVGViewController: UIViewController {
         }
         svgView.backgroundColor = UIColor.blue
         self.canvasView.addSubview(svgView)
-        
     }
 
 }

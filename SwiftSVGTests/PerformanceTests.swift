@@ -34,7 +34,7 @@ class PerformanceTests: XCTestCase {
 
     func testSwiftSVG() {
         
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             
             guard let resourceURL = Bundle(for: type(of: self)).url(forResource: "ukulele", withExtension: "svg") else {
                 XCTAssert(false, "Couldn't find resource")

@@ -42,7 +42,7 @@ public protocol SVGLayerType {
 }
 
 public extension SVGLayerType where Self: CALayer {
-    
+
     /**
      Scales a layer to aspect fit the given size.
      - Parameter rect: The `CGRect` to fit into
@@ -78,7 +78,7 @@ public extension SVGLayerType where Self: CALayer {
 open class SVGLayer: CAShapeLayer, SVGLayerType {
     
     /// The minimum CGRect that fits all subpaths
-    public var boundingBox = CGRect.zero
+    public var boundingBox = CGRect.null
 }
 
 public extension SVGLayer {
@@ -125,7 +125,7 @@ extension SVGLayer {
     override open var strokeColor: CGColor? {
         didSet {
             self.applyOnSublayers(ofType: CAShapeLayer.self) { (thisShapeLayer) in
-                thisShapeLayer.strokeColor = fillColor
+                thisShapeLayer.strokeColor = strokeColor
             }
         }
     }
